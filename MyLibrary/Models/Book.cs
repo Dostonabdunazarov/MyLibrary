@@ -12,18 +12,10 @@ namespace MyLibrary.Models
         [Required(ErrorMessage = "Не указано название")]
         public string Title { get; set; }
 
-        [Required(ErrorMessage = "Не указано дата издания")]
         [BindProperty, DataType(DataType.Date)]
+        [Required(ErrorMessage = "Не указано дата издания")]
         public DateTime DatePublish { get; set; }
         public Genre Genre { get; set; }
         public List<Author> Authors{ get; set; } = new List<Author>();
-        public Book() { }
-        public Book(string name, DateTime dt, Genre g, List<Author> a)
-        {
-            Title = name;
-            DatePublish = dt;
-            Genre = g;
-            Authors = a;
-        }
     }
 }

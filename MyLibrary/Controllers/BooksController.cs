@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MyLibrary.Models;
 
@@ -45,11 +43,9 @@ namespace MyLibrary.Controllers
         }
 
         // POST: Books/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,DatePublish,Genre,Authors")] Book book, int? selectedGenre, int[] selectedAuthors)
+        public async Task<IActionResult> Create([Bind("Id,Title,DatePublish,Genre,Authors")]Book book, int? selectedGenre, int[] selectedAuthors)
         {
             if (ModelState.IsValid)
             {
@@ -111,33 +107,6 @@ namespace MyLibrary.Controllers
             _context.Entry(newbook).State = EntityState.Modified;
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
-
-            //if (id != book.Id)
-            //{
-            //    return NotFound();
-            //}
-
-            //if (ModelState.IsValid)
-            //{
-            //    try
-            //    {
-            //        _context.Update(book);
-            //        await _context.SaveChangesAsync();
-            //    }
-            //    catch (DbUpdateConcurrencyException)
-            //    {
-            //        if (!BookExists(book.Id))
-            //        {
-            //            return NotFound();
-            //        }
-            //        else
-            //        {
-            //            throw;
-            //        }
-            //    }
-            //    return RedirectToAction(nameof(Index));
-            //}
-            // View(book);
         }
 
         // GET: Books/Delete/5

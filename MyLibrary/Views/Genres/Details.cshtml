@@ -4,23 +4,23 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<h3>Подробно</h3>
 
 <div>
-    <h4>Genre</h4>
+    <h4>Жанр</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
+            Название:
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Name)
         </dd>
-        <dd class="col-sm-10">книги
-            @foreach(var i in Model.Books){
-                @i.Title 
+        <dd class="col-sm-10"><b>Книги:</b> <br />
+            @foreach (var a in Model.Books)
+            {
+                <li>@a.Title</li>
             }
-            
         </dd>
     </dl>
 </div>

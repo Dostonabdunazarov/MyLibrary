@@ -9,10 +9,6 @@ namespace MyLibrary.Models
 
         [Required(ErrorMessage = "Не указано название!")]
         public string Name { get; set; }
-        public List<Book> Books { get; set; }
-        public Genre()
-        {
-            Books = new List<Book>();
-        }
+        public List<Book> Books { get; set; } = new List<Book>();
     }
 }

@@ -31,13 +31,11 @@ namespace MyLibrary.Controllers
             {
                 return NotFound();
             }
-
             var author = await _context.Authors.Include(c => c.Books).FirstOrDefaultAsync(m => m.Id == id);
             if (author == null)
             {
                 return NotFound();
             }
-
             return View(author);
         }
 
@@ -49,8 +47,6 @@ namespace MyLibrary.Controllers
         }
 
         // POST: Authors/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,FullName,Books")] Author author, int[] selectedBooks)
@@ -107,7 +103,6 @@ namespace MyLibrary.Controllers
                     newauthor.Books.Add(book);
                 }
             }
-
             _context.Entry(newauthor).State = EntityState.Modified;
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
@@ -120,14 +115,11 @@ namespace MyLibrary.Controllers
             {
                 return NotFound();
             }
-
-            var author = await _context.Authors
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var author = await _context.Authors.FirstOrDefaultAsync(m => m.Id == id);
             if (author == null)
             {
                 return NotFound();
             }
-
             return View(author);
         }
 

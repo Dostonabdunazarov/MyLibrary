@@ -31,32 +31,35 @@ namespace MyLibrary.Controllers
             {
                 return NotFound();
             }
-
-            var genre = await _context.Genres
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var genre = await _context.Genres.Include(c => c.Books).FirstOrDefaultAsync(m => m.Id == id);
             if (genre == null)
             {
                 return NotFound();
             }
-
             return View(genre);
         }
 
         // GET: Genres/Create
         public IActionResult Create()
         {
+            ViewBag.Books = _context.Books.ToList();
             return View();
         }
 
         // POST: Genres/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Books")] Genre genre)
+        public async Task<IActionResult> Create([Bind("Id,Name,Books")] Genre genre, int[] selectedBooks)
         {
             if (ModelState.IsValid)
             {
+                if(selectedBooks != null)
+                {
+                    foreach(var book in _context.Books.Where(s => selectedBooks.Contains(s.Id)))
+                    {
+                        genre.Books.Add(book);
+                    }
+                }
                 _context.Genres.Add(genre);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -71,8 +74,8 @@ namespace MyLibrary.Controllers
             {
                 return NotFound();
             }
-
-            var genre = await _context.Genres.FindAsync(id);
+            ViewBag.Books = _context.Books.ToList();
+            var genre = await _context.Genres.Include(c=>c.Books).FirstOrDefaultAsync(s => s.Id == id);
             if (genre == null)
             {
                 return NotFound();
@@ -81,38 +84,24 @@ namespace MyLibrary.Controllers
         }
 
         // POST: Genres/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] Genre genre)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Books")] Genre genre, int[] selectedBooks)
         {
             if (id != genre.Id)
             {
                 return NotFound();
             }
-
-            if (ModelState.IsValid)
+            Genre newgenre = await _context.Genres.Include(c => c.Books).FirstOrDefaultAsync(x => x.Id == id);
+            newgenre.Name = genre.Name;
+            newgenre.Books.Clear();
+            foreach (var item in _context.Books.Where(s => selectedBooks.Contains(s.Id))) 
             {
-                try
-                {
-                    _context.Update(genre);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!GenreExists(genre.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                newgenre.Books.Add(item);
             }
-            return View(genre);
+            _context.Entry(newgenre).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Genres/Delete/5

@@ -1,12 +1,11 @@
 ﻿@model MyLibrary.Models.Book
 
 @{
-    ViewData["Title"] = "Create";
+    //ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+<h3>Создание книг</h3>
 
-<h4>Book</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -18,22 +17,28 @@
                 <input asp-for="Title" class="form-control" />
                 <span asp-validation-for="Title" class="text-danger"></span>
             </div>
+            
             <div class="form-group">
                 <label asp-for="DatePublish" class="control-label"></label>
                 <input asp-for="DatePublish" class="form-control" />
                 <span asp-validation-for="DatePublish" class="text-danger"></span>
             </div>
+            <p class="font-weight-bolder">Жанры:</p>
             <div class="form-group">
+               
                 @foreach (Genre i in ViewBag.Genres)
                 {
-                    <input type="radio" name="selectedGenre" value="@i.Id" /> @i.Name
-                    <br>
+                       <input type="radio" name="selectedGenre" value="@i.Id" /> @i.Name
+                       <br>
                 }
             </div>
+            <p class="font-weight-bolder">Авторы:</p>
             <div class="form-group">
+                
                 @foreach (Author i in ViewBag.Authors)
                 {
-                    <input type="checkbox" name="selectedAuthors" value="@i.Id" /> @i.FullName <br>
+                       <input type="checkbox" name="selectedAuthors" value="@i.Id" /> @i.FullName
+                    <br>
                 }
             </div>
             <div class="form-group">
