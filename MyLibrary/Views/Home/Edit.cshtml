@@ -1,0 +1,32 @@
+﻿@model MyLibrary.Models.Book
+@{
+    ViewBag.Title = "Редактирование книгу";
+}
+
+<div class="text-center">
+    <form asp-action="Edit" asp-controller="Home" asp-route-id="@Model.Id">
+        <div class="form-group">
+            <label asp-for="Title" class="control-label">Название</label>
+            <input type="text" asp-for="Title" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="DatePublish" class="control-label">Год издания</label>
+            <input type="date" asp-for="DatePublish" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="Genre"></label>
+            <select asp-for="Genre" name="genre" asp-items="ViewBag.Genres"></select>
+        </div>
+
+        @foreach(var item in Model.Authors) {
+            <div class="form-group">
+                <input type="checkbox" name="selectedAuthors" value="@item.Id" class="form-control"
+                @(Model.Authors.Contains(item) ? "checked=\"checked\"" : "") />@item.FullName <br/>
+            </div>
+        }
+       
+        <div class="form-group">
+            <input type="submit" value="Сохранить" class="btn btn-default" />
+        </div>
+    </form>
+</div>

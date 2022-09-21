@@ -1,0 +1,24 @@
+﻿@model MyLibrary.Models.Book
+@using MyLibrary.Models
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<h2>Книга "@Model.Title"</h2>
+<div>
+    <dl class="dl-horizontal">
+        <dt>Идентификатор</dt>
+        <dd>@Model.Id</dd>
+
+        <dt>Год издания</dt>
+        <dd>@Model.DatePublish</dd>
+
+        <dt>Жанр</dt>
+        <dd>@Model.Genre.Name</dd>
+        
+        <dt>Авторы</dt>
+        @foreach(var item in Model.Authors) {
+            <dd>@item.FullName</dd>
+        }
+    </dl>
+</div>
