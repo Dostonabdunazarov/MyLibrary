@@ -1,6 +1,8 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MyLibrary.Models;
@@ -45,26 +47,48 @@ namespace MyLibrary.Controllers
         // POST: Books/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,DatePublish,Genre,Authors")]Book book, int? selectedGenre, int[] selectedAuthors)
-        {
-            if (ModelState.IsValid)
-            {
-                if (selectedAuthors != null)
-                {
-                    foreach (var c in _context.Authors.Where(s => selectedAuthors.Contains(s.Id)))
-                    {
+        public async Task<IActionResult> Create([Bind("Id,Title,DatePublish,Picture,Genre,Authors")] Book book, int? selectedGenre, int[] selectedAuthors, IFormFile userfile) {
+            if (ModelState.IsValid) {
+                string filename = userfile.FileName;
+                filename = Path.GetFileName(filename);
+                string fileupload = Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot\files", filename);
+                using var stream = new FileStream(fileupload, FileMode.Create);
+                _ = userfile.CopyToAsync(stream);
+
+                if (selectedAuthors != null) {
+                    foreach (var c in _context.Authors.Where(s => selectedAuthors.Contains(s.Id))) {
                         book.Authors.Add(c);
                     }
                 }
-                if (selectedGenre != null)
-                {
+                if (selectedGenre != null) {
                     book.Genre = _context.Genres.FirstOrDefault(c => c.Id == selectedGenre);
                 }
+                book.FilePath = filename;
                 _context.Books.Add(book);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(book);
+        }
+        public IActionResult DownloadFile(int? id) {
+            if (id == null) {
+                return NotFound();
+            }
+            var book = _context.Books.FirstOrDefault(c => c.Id == id);
+            var memory = DownloadSinghFile(book.FilePath, "wwwroot\\files");
+            return File(memory.ToArray(), "application/pdf", book.FilePath);
+        }
+        private MemoryStream DownloadSinghFile(string filename, string uploadPath) {
+            var path = Path.Combine(Directory.GetCurrentDirectory(), uploadPath, filename);
+            var memory = new MemoryStream();
+            if (System.IO.File.Exists(path)) {
+                var net = new System.Net.WebClient();
+                var data = net.DownloadData(path);
+                var content = new MemoryStream(data);
+                memory = content;
+            }
+            memory.Position = 0;
+            return memory;
         }
 
         // GET: Books/Edit/5

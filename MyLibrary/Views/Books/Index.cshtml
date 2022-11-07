@@ -19,6 +19,9 @@
                 Дата издания
             </th>
             <th>
+                Скачать
+            </th>
+            <th>
                 #
             </th>
             <th></th>
@@ -32,6 +35,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.DatePublish)
+            </td>
+             <td>
+                <a asp-action="DownloadFile" asp-route-id="@item.Id">@item.FilePath</a>
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

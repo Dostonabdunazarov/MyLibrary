@@ -8,44 +8,52 @@
 
 <hr />
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            
-            <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
-            </div>
-            
-            <div class="form-group">
-                <label asp-for="DatePublish" class="control-label"></label>
-                <input asp-for="DatePublish" class="form-control" />
-                <span asp-validation-for="DatePublish" class="text-danger"></span>
-            </div>
-            <p class="font-weight-bolder">Жанры:</p>
-            <div class="form-group">
-               
-                @foreach (Genre i in ViewBag.Genres)
-                {
-                       <input type="radio" name="selectedGenre" value="@i.Id" /> @i.Name
-                       <br>
+    @using (Html.BeginForm("Create", "Books", FormMethod.Post, new { @enctype = "multipart/form-data" })) {
+
+            <form asp-action="Create" asp-controller="Books" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="form-group">
+                    <label asp-for="Title" class="control-label"></label>
+                    <input asp-for="Title" class="form-control" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="DatePublish" class="control-label"></label>
+                    <input asp-for="DatePublish" class="form-control" />
+                    <span asp-validation-for="DatePublish" class="text-danger"></span>
+                </div>
+
+                <span><b>Загрузка файла</b></span> <br />
+                <input type="file" asp-for="FilePath" name="userfile" /> <br /><br />
+
+                <p class="font-weight-bolder">Жанры:</p>
+                @if (ViewBag.Genres != null) {
+                    <div class="form-group">
+                        @foreach (Genre i in ViewBag.Genres) {
+                            <input type="radio" name="selectedGenre" value="@i.Id" /> @i.Name
+                            <br>
+                        }
+                    </div>
                 }
-            </div>
-            <p class="font-weight-bolder">Авторы:</p>
-            <div class="form-group">
-                
-                @foreach (Author i in ViewBag.Authors)
-                {
-                       <input type="checkbox" name="selectedAuthors" value="@i.Id" /> @i.FullName
-                    <br>
+                <p class="font-weight-bolder">Авторы:</p>
+                @if (ViewBag.Authors != null) {
+                    <div class="form-group">
+
+                        @foreach (Author i in ViewBag.Authors) {
+                            <input type="checkbox" name="selectedAuthors" value="@i.Id" /> @i.FullName
+                            <br>
+                        }
+                    </div>
                 }
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            </form>
+       
+    }
+
 </div>
 
 <div>

@@ -7,8 +7,8 @@ namespace MyLibrary.Models
     {
         public int Id { get; set; }
 
-        [Required(ErrorMessage="Не указано ФИО!")]
         public string FullName { get; set; }
+
         public List<Book> Books { get; set; } = new List<Book>();
     }
 }

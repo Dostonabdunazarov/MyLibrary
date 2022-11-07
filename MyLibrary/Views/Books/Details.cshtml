@@ -9,7 +9,7 @@
 <div class="display-label"><b>Название</b></div>
 <div class="display-field">
     @Html.DisplayFor(model => model.Title)
-    
+
 </div>
 <div class="display-label"><b>Дата издании</b></div>
 <div class="display-field">
@@ -18,46 +18,18 @@
 
 <div class="display-label"><b>Жанр</b></div>
 <div class="display-field">
-    <li>@Html.DisplayFor(model => model.Genre.Name)</li>
+    <ul>
+        <li>@Html.DisplayFor(model => model.Genre.Name)</li>
+    </ul>
 </div>
 
 <div class="display-label"><b>Авторы</b></div>
-@foreach (Author a in Model.Authors)
-{
-    <li>@a.FullName</li>
-}
-@*@foreach (var a in ViewBag.Auths)
-{
-    <p>@a.Title</p>
-    @foreach(var b in a.Authors) {
-        <li>@b.FullName</li>
+<ul>
+    @foreach (Author a in Model.Authors) {
+        <li>@a.FullName</li>
     }
-    <br />
-}*@
+</ul>
 
-@*<div>
-    <h4>Book</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DatePublish)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DatePublish)
-        </dd>
-        <dt>Авторы</dt>
-        @foreach (var item in ViewBag.Auths)
-        {
-            <dd>@item.FullName</dd>
-        }
-    </dl>
-</div>*@
 
 <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
 <a asp-action="Index">Back to List</a>
