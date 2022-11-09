@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -40,6 +41,7 @@ namespace MyLibrary.Controllers
         }
 
         // GET: Genres/Create
+        [Authorize]
         public IActionResult Create()
         {
             ViewBag.Books = _context.Books.ToList();
@@ -49,6 +51,7 @@ namespace MyLibrary.Controllers
         // POST: Genres/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Create([Bind("Id,Name,Books")] Genre genre, int[] selectedBooks)
         {
             if (ModelState.IsValid)
@@ -68,6 +71,7 @@ namespace MyLibrary.Controllers
         }
 
         // GET: Genres/Edit/5
+        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -86,6 +90,7 @@ namespace MyLibrary.Controllers
         // POST: Genres/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Books")] Genre genre, int[] selectedBooks)
         {
             if (id != genre.Id)
@@ -105,6 +110,7 @@ namespace MyLibrary.Controllers
         }
 
         // GET: Genres/Delete/5
+        [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -125,6 +131,7 @@ namespace MyLibrary.Controllers
         // POST: Genres/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var genre = await _context.Genres.FindAsync(id);

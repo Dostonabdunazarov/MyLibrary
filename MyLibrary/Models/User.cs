@@ -5,8 +5,6 @@ namespace MyLibrary.Models
     public class User
     {
         public int Id { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
 
         [Required]
         public string Login { get; set; }
@@ -21,6 +19,6 @@ namespace MyLibrary.Models
         [DataType(DataType.Password)]
         public string ConfirmPassword { get; set; }
         public int RoleId { get; set; }
-        public UserRole Role { get; set; }
+        public Role Role { get; set; }
     }
 }

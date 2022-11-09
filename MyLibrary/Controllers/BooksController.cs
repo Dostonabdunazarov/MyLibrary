@@ -2,10 +2,12 @@
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MyLibrary.Models;
+using static System.Net.WebRequestMethods;
 
 namespace MyLibrary.Controllers
 {
@@ -37,6 +39,7 @@ namespace MyLibrary.Controllers
         }
 
         // GET: Books/Create
+        [Authorize]
         public IActionResult Create()
         {
             ViewBag.Genres = _context.Genres.ToList();
@@ -47,6 +50,7 @@ namespace MyLibrary.Controllers
         // POST: Books/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Create([Bind("Id,Title,DatePublish,Picture,Genre,Authors")] Book book, int? selectedGenre, int[] selectedAuthors, IFormFile userfile) {
             if (ModelState.IsValid) {
                 string filename = userfile.FileName;
@@ -92,6 +96,7 @@ namespace MyLibrary.Controllers
         }
 
         // GET: Books/Edit/5
+        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -111,6 +116,7 @@ namespace MyLibrary.Controllers
         // POST: Books/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Title,DatePublish")] Book book, int[] selectedAuthors, int? selectedGenre)
         {
             Book newbook = await _context.Books.Include(c => c.Authors).Include(x => x.Genre).FirstOrDefaultAsync(s => s.Id == id);
@@ -134,6 +140,7 @@ namespace MyLibrary.Controllers
         }
 
         // GET: Books/Delete/5
+        [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -154,6 +161,7 @@ namespace MyLibrary.Controllers
         // POST: Books/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var book = await _context.Books.FindAsync(id);
@@ -161,7 +169,11 @@ namespace MyLibrary.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-
+        public IActionResult Filter(string filter)
+        {
+            var book = _context.Books.FirstOrDefault(c => c.Title == filter);
+            return View(book);
+        }
         private bool BookExists(int id)
         {
             return _context.Books.Any(e => e.Id == id);
